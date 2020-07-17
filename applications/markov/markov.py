@@ -11,8 +11,6 @@ with open("input.txt") as f:
 # TODO: analyze which words can follow other words
 # Your code here
 word_list = words.split()
-first_word = random.choice(word_list)
-print(first_word)
 
 
 def indicate(word):
@@ -20,13 +18,13 @@ def indicate(word):
         if word[0] in upper_chars:
             return 0    # ===Start===
     else:
-        if word[0] == '"' and word[1] in upper_chars:
+        if (word[0] == '"' or word[0] == '"') and word[1] in upper_chars:
             return 0    # ===Start===
 
         elif word[-1] == "." or word[-1] == "?" or word[-1] == "!":
             return 1    # ===Stop===
 
-        elif (word[-2] == "." or word[-2] == "?" or word[-2] == "!") and word[-1] == '"':
+        elif (word[-2] == "." or word[-2] == "?" or word[-2] == "!") and (word[-1] == '"' or word[-1] == "'"):
             return 1    # ===Stop===
 
         else:
@@ -41,6 +39,12 @@ for i in range(len(word_list)):
     if i < len(word_list) - 1:
         next_word = word_list[i + 1]
 
+    if i > 0:
+        prev_word = word_list[i - 1]
+        if curr_word not in my_dict[prev_word]["word_after_list"]:
+            my_dict[prev_word]["word_after_list"].append(
+                curr_word.replace("\"", ""))
+
     if curr_word not in my_dict:
         new_word_obj = {}
         new_word_obj["word_after_list"] = []
@@ -50,7 +54,22 @@ for i in range(len(word_list)):
     else:
         if next_word:
             if next_word not in my_dict[curr_word]["word_after_list"]:
-                my_dict[curr_word]["word_after_list"].append(next_word)
+                my_dict[curr_word]["word_after_list"].append(
+                    next_word.replace("\"", "''"))
+    if curr_word == '"It':
+        print("\n")
+        print(next_word)
+        print("\n")
+
+
+def get_rand_start():
+    indicator = 2
+    while indicator != 0:
+        rand_word = random.choice(word_list)
+        indicator = my_dict[rand_word]["indicator"]
+
+    return rand_word
+
 
 print(my_dict)
 
