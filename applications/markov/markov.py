@@ -42,8 +42,7 @@ for i in range(len(word_list)):
     if i > 0:
         prev_word = word_list[i - 1]
         if curr_word not in my_dict[prev_word]["word_after_list"]:
-            my_dict[prev_word]["word_after_list"].append(
-                curr_word.replace("\"", ""))
+            my_dict[prev_word]["word_after_list"].append(curr_word)
 
     if curr_word not in my_dict:
         new_word_obj = {}
@@ -54,25 +53,52 @@ for i in range(len(word_list)):
     else:
         if next_word:
             if next_word not in my_dict[curr_word]["word_after_list"]:
-                my_dict[curr_word]["word_after_list"].append(
-                    next_word.replace("\"", "''"))
-    if curr_word == '"It':
-        print("\n")
-        print(next_word)
-        print("\n")
+                my_dict[curr_word]["word_after_list"].append(next_word)
 
 
 def get_rand_start():
+    all_keys = []
+    for i in my_dict.items():
+        all_keys.append(i[0])
     indicator = 2
     while indicator != 0:
-        rand_word = random.choice(word_list)
+        rand_word = random.choice(all_keys)
         indicator = my_dict[rand_word]["indicator"]
 
     return rand_word
 
 
-print(my_dict)
+# print(my_dict)
 
+
+def generate_sentences(num):
+
+    sentence_count = 0
+    sentence = ""
+
+    while sentence_count < num:
+        sentence_stopped = False
+        curr_word = get_rand_start()
+        sentence += curr_word + " "
+
+        while sentence_stopped == False:
+            curr_word = my_dict.get(curr_word)
+            if len(curr_word["word_after_list"]) > 0:
+                curr_word = random.choice(
+                    curr_word["word_after_list"])
+                sentence += curr_word + " "
+
+                if my_dict[curr_word]["indicator"] == 1:
+                    sentence_stopped = True
+
+            else:
+                sentence_stopped = True
+        sentence_count += 1
+        sentence += "\n"
+    return sentence
+
+
+print(generate_sentences(15))
 
 # TODO: construct 5 random sentences
 # Your code here
