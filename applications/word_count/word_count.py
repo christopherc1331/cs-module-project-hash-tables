@@ -4,8 +4,9 @@ import string
 def word_count(s):
     # Your code here
     alpha = string.ascii_lowercase
-
-    words = s.split(" ")
+    if len(s) == 0:
+        return {}
+    words = s.split()
     for i in range(len(words)):
         words[i] = words[i].lower()
     new_words = []
@@ -14,10 +15,11 @@ def word_count(s):
         new_word = ""
         for x in range(len(words[i])):
             curr_letter = words[i][x]
-            if curr_letter in alpha:
+            if curr_letter in alpha or curr_letter == "'":
                 new_word += curr_letter
 
-        new_words.append(new_word)
+        if new_word != "":
+            new_words.append(new_word)
 
     my_dict = {}
 
@@ -33,6 +35,9 @@ def word_count(s):
 if __name__ == "__main__":
     print(word_count(""))
     print(word_count("Hello"))
+    print(word_count("Hello    hello"))
+    print(word_count('Hello, my cat.  And my cat doesn\'t say "hello" back.'))
     print(word_count('Hello, my cat. And my cat doesn\'t say "hello" back.'))
     print(word_count(
         'This is a test of the emergency broadcast network. This is only a test.'))
+    print(word_count('a a\ra\na\ta \t\r\n'))
