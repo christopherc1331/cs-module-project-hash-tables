@@ -98,7 +98,7 @@ def generate_sentences(num):
     return sentence
 
 
-print(generate_sentences(15))
+print(generate_sentences(100))
 
 # TODO: construct 5 random sentences
 # Your code here
